@@ -1,0 +1,3 @@
+Sometimes for (key of Object.keys(req.cookies)) {} gives an error:
+  key is not defined
+As of Node.js 12.18.2
