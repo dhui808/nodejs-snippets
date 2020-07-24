@@ -1,3 +1,18 @@
 Sometimes for (key of Object.keys(req.cookies)) {} gives an error:
   key is not defined
 As of Node.js 12.18.2
+
+Debugging Node.js application with Chrome DevTool
+From commandline, run the Node.js app with --inspect option:
+node --inspect index.js
+
+From Chrome:
+about:inspect
+Click Open dedicated DevTools for Node
+Add connection
+localhost:9229
+
+Click Sources
+Right-click - Add folder to workspace
+
+Add break points at the desired files.
