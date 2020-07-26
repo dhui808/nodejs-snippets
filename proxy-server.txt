@@ -1,0 +1,4 @@
+When installing npm packages behind corporate proxy server, 
+https://domain%5Cusername:password@proxy:port
+where %5C is backslash. Also need to encode special characters in HTML URL  like \_$. But dot in the domain name needed not to be encoded.
+https://stackoverflow.com/questions/49902035/407-authentication-required-npm 
