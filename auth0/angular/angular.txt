@@ -26,3 +26,4 @@ AuthModule.forRoot({
 		        allowedList: [`${env.dev.serverUrl}/api/messages/protected-message`],
 		    }
 		})
+3. Make API calls using the HttpClient
