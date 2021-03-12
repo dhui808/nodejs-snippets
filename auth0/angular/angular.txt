@@ -1,6 +1,5 @@
-The Auth0 Angular SDK provides an HttpInjector that automatically attaches access tokens to outgoing requests
-when using the built-in Angular HttpClient module. The injector needs to be configured to know to which requests
-it needs to attach access tokens.
+1. The Auth0 Angular SDK provides an HttpInjector that automatically attaches access tokens to outgoing requests
+when using the built-in Angular HttpClient module.
 
 // src/app/app.module.ts
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -19,3 +18,11 @@ import { AuthHttpInterceptor } from '@auth0/auth0-angular';
   bootstrap: [AppComponent],
 })
 export class AppModule {}
+
+2. Tell the SDK to which requests to attach access tokens by further configuring AuthModule.forRoot().
+AuthModule.forRoot({
+			...env.auth,
+			httpInterceptor: {
+		        allowedList: [`${env.dev.serverUrl}/api/messages/protected-message`],
+		    }
+		})
