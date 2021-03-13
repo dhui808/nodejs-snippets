@@ -27,3 +27,28 @@ AuthModule.forRoot({
 		    }
 		})
 3. Make API calls using the HttpClient
+
+auth config:
+{
+  "domain": "mydomain.us.auth0.com",
+  "clientId": "<client_id>",
+  "audience": "https://express.sample.me.com",
+  "serverUrl": "http://localhost:6060"
+}
+
+Angular token request to Auth0:
+
+https://mydomain.us.auth0.com/oauth/token
+client_id: "<client_id>"
+code: "V9kAQdiYZQ6YM_mL"
+code_verifier: "RNKtVfpILYJcnuLmELV8TqvDdc4jMMx98Pi6p8X8bmg"
+grant_type: "authorization_code"
+redirect_uri: "http://localhost:4200"
+
+Auth0 response:
+
+"access_token": "<access_token>",
+"id_token": "<id_token",
+"scope": "openid profile email",
+"expires_in": 86400,
+"token_type": "Bearer"
