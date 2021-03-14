@@ -27,8 +27,19 @@ On the server side
 		
 	Define the role permissions as a TypeScript enum.
 	Define the authorization function checkPermissions(permissions).
+	  	const checkPermissions = (permissions) => {
+		  return jwtAuthz([permissions], {
+		    customScopeKey: "permissions",
+		    checkAllScopes: true,
+		    failWithError: true
+		  });
+		};
 	Exectue checkPermissions(permissions) for each protected endpoint to determine if access authorized.
-
+		app.get('/api/external', checkJwt, checkPermissions('ping'), (req, res) => {
+		  res.send({
+		    msg: 'Your access permission was successfully validated!',
+		  });
+		});
 On the client side
 	Uses auth.idTokenClaims$ to check if the user has the specified role.
 	HTML:
