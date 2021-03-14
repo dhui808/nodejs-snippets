@@ -1,0 +1,115 @@
+On the Auth0 side
+	Create application
+	Configure application settings:
+		Allowed Callback URLs: htp://localhost:4200
+		Allowed Logout URLs: htp://localhost:4200
+		Allowed Origins (CORS):
+		SAVE CHANGES
+	Create API
+	
+On the server side
+	npm i express-jwt jwks-rsa
+	Add the Auth0 configuration variables and the application URL to API
+		{
+		  "domain": "mydomain.us.auth0.com",
+		  "audience": "https://auth0-api.example.com",
+		  "appUri": "http://localhost:4200"
+		}
+	Create an authentication function to check if the user is authenticated
+		const checkJwt = jwt({
+		  secret: jwksRsa.expressJwtSecret({
+			cache: true,
+			rateLimit: true,
+			jwksRequestsPerMinute: 5,
+			jwksUri: `https://${authConfig.domain}/.well-known/jwks.json`,
+		  }),
+
+		  audience: authConfig.audience,
+		  issuer: `https://${authConfig.domain}/`,
+		  algorithms: ['RS256'],
+		});
+	Check if the user is authenticated for each protected endpoint:
+		app.get('/api/external', checkJwt, (req, res) => {
+		  res.send({
+		    msg: 'Your access token was successfully validated!',
+		  });
+		});
+	Or install the authentication function at router level:
+		// Public API endpoints - unprocted
+		itemsRouter.get(...);
+
+		// Protected API endpoints - install the authentication function
+		itemsRouter.use(checkJwt);
+
+		// Followed by all protected endpoints
+		itemsRouter.post(...);
+		itemsRouter.put(...);
+		itemsRouter.delete(...);
+On the client side
+	Add the Auth0 configuration variables to Angular:
+		{
+		  "domain": "mydomain.us.auth0.com",
+		  "clientId": "myclientid",
+		  "audience": "https://auth0-api.example.com",
+		  "apiUri": "http://localhost:3001"
+		}
+	Define protected routes: app-routing.module.ts
+		const routes: Routes = [
+		  {
+			path: 'profile',
+			component: ProfileComponent,
+			canActivate: [AuthGuard],
+		  },
+		  {
+			path: 'external-api',
+			component: ExternalApiComponent,
+			canActivate: [AuthGuard],
+		  },
+		  {
+			path: '',
+			component: HomeComponent,
+			pathMatch: 'full',
+		  },
+		];
+	Add login/logout calls:
+	  HTML:
+		<button class="btn btn-primary btn-block" (click)="loginWithRedirect()">Log in</button>
+		<button class="btn btn-danger btn-block" (click)="logout()">Log out</button>
+	  TypeScript:
+		  loginWithRedirect() {
+			this.auth.loginWithRedirect();
+		  }
+
+		  logout() {
+			this.auth.logout({ returnTo: this.doc.location.origin });
+		  }
+	Retrieving user info:
+	  ngOnInit(): void {
+		this.auth.user$.subscribe(
+		  (profile) => (this.profileJson = JSON.stringify(profile, null, 2))
+		);
+	  }
+	app.module.ts:
+		@NgModule({
+		  declarations: [...],
+		  imports: [
+			BrowserModule,
+			AppRoutingModule,
+			HttpClientModule,
+			FontAwesomeModule,
+			// 👇 update AuthModule
+			AuthModule.forRoot({
+			  ...env.auth,
+			  httpInterceptor: {
+				allowedList: [`${env.dev.serverUrl}/api/messages/protected-message`],
+			  },
+			}),
+		  ],
+		  providers: [...],
+		  bootstrap: [...],
+		})
+		export class AppModule {}
+
+References:
+https://auth0.com/blog/complete-guide-to-angular-user-authentication/
+https://auth0.com/blog/node-js-and-typescript-tutorial-build-a-crud-api/
