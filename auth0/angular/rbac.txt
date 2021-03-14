@@ -31,3 +31,17 @@ On the server side
 
 On the client side
 	Uses auth.idTokenClaims$ to check if the user has the specified role.
+	HTML:
+	  <li class="nav-item" *ngIf="hasPingRole()">
+            <a routerLink="external-api" class="nav-link">External API</a>
+          </li>
+	Typescript:
+	  ngOnInit() {
+	    this.auth.idTokenClaims$.subscribe((claims) => {
+		this.roles = claims? claims['https://menu-api.example.com/roles'] : null; 
+	    });
+	  }
+
+	  hasPingRole() {
+		return this.roles && this.roles.indexOf('ping-nodejs-api') > -1;
+	  }	
