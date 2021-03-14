@@ -1,1 +1,33 @@
+https://community.auth0.com/t/best-practice-to-identify-user-permissions-client-side-spa/51185/5
+Access Token: intended to be consumed by the API
+ID Token: intended to be consumed by the front end
 
+On the Auth0 side
+	Define permissions for the API: Permissions - fill Permission and Description - Add
+	Enable RBAC: Settings - Enable RBAC
+	Enable Add Permissions in the Access Token
+	Create users:
+		Users & Roles - Users - CREATE USER - Filll fields - CREATE
+	Create roles: 
+		Users & Roles - Roles - Create Role - fill Name and Description - Create
+		Permissions - ADD PERMISSIONS - Select an API... - Check the permission checkbox - ADD PERMISSIONS
+		Users - ADD USERS - Select a user... - ASSIGN
+	Create Auth0 Rules: JS functions that execute when a user logs in to the application
+		(need a rule to add user roles to Access token and ID token)
+		Rules - CREATE RULE - Empty Rule
+			NAME: add-roles-to-tokens
+			Script: copy & paste the JS script
+			SAVE CHANGES
+
+On the server side
+	npm install express-jwt jwks-rsa express-jwt-authz
+		jwks-rsa: retrieving RSA signing keys from a JWKS (JSON Web Key Set) endpoint
+		express-jwt: validating JWTs (JSON Web Tokens)
+		express-jwt-authz:inspecting the permissions claim of the access token
+		
+	Define the role permissions as a TypeScript enum.
+	Define the authorization function checkPermissions(permissions).
+	Exectue checkPermissions(permissions) for each protected endpoint to determine if access authorized.
+
+On the client side
+	Uses auth.idTokenClaims$ to check if the user has the specified role.
