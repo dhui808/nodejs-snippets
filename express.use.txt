@@ -1,0 +1,10 @@
+express().use() is a method that allows us to register a middleware.
+
+The middleware method is like an interceptor in java, this method always executes for all requests.
+
+Purpose and use of middleware:-
+
+To check if the session expired or not
+for user authentication and authorization
+check for cookie (expiry date)
+parse data before the response
