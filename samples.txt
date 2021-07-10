@@ -1,0 +1,6 @@
+Frontend: Node.js and EJS (embedded JavaScript) for templating
+Backend:  Node.js and Express
+MongoDB database
+https://developers.redhat.com/articles/deploy-a-NodeJS-app-OpenShift
+https://github.com/jankleinert/concession-kiosk-backend
+https://github.com/jankleinert/concession-kiosk-frontend
