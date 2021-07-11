@@ -16,3 +16,5 @@ Click Sources
 Right-click - Add folder to workspace
 
 Add break points at the desired files.
+
+https://developers.redhat.com/blog/2018/05/15/debug-your-node-js-application-on-openshift-with-chrome-devtools
